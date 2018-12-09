@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+    <script src="main.js"></script>
+</head>
+
+<body>
+    <div class="container" style="text-align:center; color:blue; ">
+        <h1>The Psychic Game</h1>
+
+        <p>Guess which letter I'm thinking of</p>
+
+
+
+        <div id="userStats">
+            <p>Wins: <strong><span id="numWins"></span></strong></p>
+            <p>Losses: <strong><span id="numLosses"></span></strong></p>
+        </div>
+
+
+        <p>Guesses left: <strong><span id="numTriesLeft">9</span></strong></p>
+        <p>Your guesses so far:</p>
+        <p><strong><span id="guesses"></span></strong></p>
+    </div>
+    <script>
+        var numWins = 0,
+            numLosses = 0;
+
+        var answer;
+        var guessesArray, guessesString, numTriesLeft;
+
+
+        function startNewGame() {
+            answer = String.fromCharCode(Math.floor(26 * Math.random()) + 97);
+            $("#answer").text(answer);
+
+            guessesArray = [];
+            guessesString = "";
+            numTriesLeft = 9;
+
+
+            $("#numWins").text(numWins);
+            $("#numLosses").text(numLosses);
+            $("#numTriesLeft").text(numTriesLeft);
+            $("#guesses").text(guessesString);
+        }
+
+        $(document).ready(function () {
+            startNewGame();
+
+
+
+            $(document).on("keypress", event => {
+                const yourGuess = String.fromCharCode(event.which).toLowerCase();
+
+                if ("a" <= yourGuess && yourGuess <= "z") {
+                    if (!guessesArray.includes(yourGuess)) {
+                        numTriesLeft--;
+
+                        $("#numTriesLeft").text(numTriesLeft);
+
+                        guessesArray.push(yourGuess);
+                        guessesString += yourGuess;
+
+                        $("#guesses").text(guessesString);
+
+                        if (yourGuess === answer) {
+                            numWins++;
+
+                            startNewGame();
+
+                        } else if (numTriesLeft === 0) {
+                            numLosses++;
+
+                            startNewGame();
+
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
